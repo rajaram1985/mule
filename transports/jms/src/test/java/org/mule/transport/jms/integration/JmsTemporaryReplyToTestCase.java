@@ -54,14 +54,6 @@ public class JmsTemporaryReplyToTestCase extends AbstractJmsFunctionalTestCase
     }
 
     @Test
-    public void testReplyEnabledNonBlocking() throws Exception
-    {
-        MuleMessage response = runFlowNonBlocking("JMSService1NonBlockingFixed", TEST_MESSAGE).getMessage();
-        verify("JMSService1NonBlockingFixed");
-        assertEchoResponse(response);
-    }
-
-    @Test
     public void testReplyEnabledNonBlockingTimeout() throws Exception
     {
         MuleMessage response = runFlowNonBlocking("JMSService1NonBlockingTimeoutFixed", TEST_MESSAGE).getMessage();
