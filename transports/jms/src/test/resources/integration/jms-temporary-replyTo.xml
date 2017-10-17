@@ -93,8 +93,4 @@
         <test:assert count="1"/>
     </flow>
 
-    <flow name="batchReplyToFlow">
-        <jms:inbound-endpoint address="${middle.destination}" connector-ref="jmsConnector2"/>
-    </flow>
-
 </mule>
