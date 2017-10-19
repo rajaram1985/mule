@@ -35,7 +35,8 @@ public class ConfigurationInstanceNotification extends CustomNotification {
 
   @Override
   public String toString() {
-    return String.format("%s {action=%s, resourceId=%s, timestamp=%s}", EVENT_NAME, getActionName(action), resourceIdentifier,
+    return String.format("%s {action=%s, resourceId=%s, timestamp=%s}", getClass().getName(), getActionName(action),
+                         resourceIdentifier,
                          timestamp);
   }
 

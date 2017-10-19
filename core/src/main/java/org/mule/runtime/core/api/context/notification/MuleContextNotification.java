@@ -70,7 +70,7 @@ public class MuleContextNotification extends AbstractServerNotification {
 
   @Override
   public String toString() {
-    return EVENT_NAME + "{" + "action=" + getActionName(action) + ", resourceId=" + resourceIdentifier + ", timestamp="
+    return getClass().getName() + "{" + "action=" + getActionName(action) + ", resourceId=" + resourceIdentifier + ", timestamp="
         + timestamp + "}";
   }
 
