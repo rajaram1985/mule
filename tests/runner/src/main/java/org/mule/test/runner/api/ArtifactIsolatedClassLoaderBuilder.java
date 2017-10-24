@@ -69,10 +69,10 @@ public class ArtifactIsolatedClassLoaderBuilder {
   private List<String> extraBootPackages;
 
   /**
-   * Sets the {@link Set} of Maven coordinates in format {@code <groupId>:<artifactId>} in order to be added to the sharedLib
-   * {@link ArtifactClassLoader}
+   * Sets the {@link Set} of Maven coordinates in format {@code <groupId>:<artifactId>} or {@code <groupId>:<artifactId>:<classifier>}
+   * in order to be added to the sharedLib {@link ArtifactClassLoader}
    *
-   * @param applicationSharedLibCoordinates {@link List} of Maven coordinates in format {@code <groupId>:<artifactId>}
+   * @param applicationSharedLibCoordinates {@link List} of Maven coordinates to add
    * @return this
    */
   public ArtifactIsolatedClassLoaderBuilder setApplicationSharedLibCoordinates(Set<String> applicationSharedLibCoordinates) {
@@ -80,18 +80,31 @@ public class ArtifactIsolatedClassLoaderBuilder {
     return this;
   }
 
-  // TODO(pablo.kraan): runner - add javadoc
+  /**
+   * Sets the {@link Set} of Maven coordinates in format {@code <groupId>:<artifactId>} or {@code <groupId>:<artifactId>:<classifier>}
+   * in order to be added to the application {@link ArtifactClassLoader}
+   *
+   * @param applicationLibCoordinates {@link List} of Maven coordinates to add
+   * @return this
+   */
   public ArtifactIsolatedClassLoaderBuilder setApplicationLibCoordinates(Set<String> applicationLibCoordinates) {
     this.applicationLibCoordinates = applicationLibCoordinates;
     return this;
   }
 
+  /**
+   * Sets the {@link Set} of Maven coordinates in format {@code <groupId>:<artifactId>} or {@code <groupId>:<artifactId>:<classifier>}
+   * in order to be exported on the test runner's {@link ArtifactClassLoader} in addition to test classes and resources from the
+   * module being tested
+   *
+   * @param testRunnerExportedLibCoordinates {@link List} of Maven coordinates to add
+   * @return this
+   */
+
   public ArtifactIsolatedClassLoaderBuilder setTestRunnerExportedLibCoordinates(Set<String> testRunnerExportedLibCoordinates) {
     this.testRunnerExportedLibCoordinates = testRunnerExportedLibCoordinates;
     return this;
   }
-
-
 
   /**
    * Sets the {@link ClassPathClassifier} implementation to be used by the builder.
