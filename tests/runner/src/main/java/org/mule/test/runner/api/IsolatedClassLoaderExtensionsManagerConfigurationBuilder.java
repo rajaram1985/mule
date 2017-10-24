@@ -122,11 +122,13 @@ public class IsolatedClassLoaderExtensionsManagerConfigurationBuilder extends Ab
                   finder.getLoader().loadExtensionModel(classLoader, getDefault(emptySet()), finder.getParams());
               extensionModels.add(extension);
             } else {
+              // TODO(pablo.kraan): runner - why this message is logged for the test-runner
               LOGGER
                   .debug("Discarding plugin with artifactName '{}' as it doesn't have an ExtensionModelLoaderDescriptor defined",
                          artifactName);
             }
           } else {
+            // TODO(pablo.kraan): runner - why this message is logged for the test-runner
             LOGGER.debug("Discarding plugin with artifactName '{}' as it doesn't have a mule-artifact.json", artifactName);
           }
         });

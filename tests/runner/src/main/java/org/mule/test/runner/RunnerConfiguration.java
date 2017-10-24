@@ -34,14 +34,19 @@ public class RunnerConfiguration {
   private static final String TEST_EXCLUSIONS = "testExclusions";
   private static final String TEST_INCLUSIONS = "testInclusions";
   private static final String EXPORT_PLUGIN_CLASSES = "exportPluginClasses";
-  private static final String SHARED_RUNTIME_LIBS = "sharedRuntimeLibs";
+  private static final String SHARED_RUNTIME_LIBS = "applicationSharedRuntimeLibs";
+  private static final String APPLICATION_RUNTIME_LIBS = "applicationRuntimeLibs";
+  private static final String TEST_RUNNER_EXPORTED_RUNTIME_LIBS = "testRunnerExportedRuntimeLibs";
   private static final String EXTRA_PRIVILEGED_ARTIFACTS = "extraPrivilegedArtifacts";
+  public static final String TEST_RUNNER_ARTIFACT_ID = "org.mule.tests.plugin:mule-tests-runner-plugin:";
 
   private Set<String> providedExclusions;
   private Set<String> testExclusions;
   private Set<String> testInclusions;
   private Set<Class> exportPluginClasses;
-  private Set<String> sharedRuntimeLibs;
+  private Set<String> sharedApplicationRuntimeLibs;
+  private Set<String> applicationRuntimeLibs;
+  private Set<String> testRunnerExportedRuntimeLibs;
   private Set<String> extraPrivilegedArtifacts;
 
   private String loadedFromTestClass;
@@ -58,8 +63,16 @@ public class RunnerConfiguration {
     return providedExclusions;
   }
 
-  public Set<String> getSharedRuntimeLibs() {
-    return sharedRuntimeLibs;
+  public Set<String> getSharedApplicationRuntimeLibs() {
+    return sharedApplicationRuntimeLibs;
+  }
+
+  public Set<String> getApplicationRuntimeLibs() {
+    return applicationRuntimeLibs;
+  }
+
+  public Set<String> getTestRunnerExportedRuntimeLibs() {
+    return testRunnerExportedRuntimeLibs;
   }
 
   public Set<String> getTestExclusions() {
@@ -94,10 +107,15 @@ public class RunnerConfiguration {
     runnerConfiguration.providedExclusions = new HashSet<>(readAttributeFromHierarchy(PROVIDED_EXCLUSIONS, testClass));
     runnerConfiguration.testExclusions = new HashSet<>(readAttributeFromHierarchy(TEST_EXCLUSIONS, testClass));
     runnerConfiguration.testInclusions = new HashSet<>(readAttributeFromHierarchy(TEST_INCLUSIONS, testClass));
+    // TODO(pablo.kraan): runner - review if this can be moved to class only instead of class hierarchy
+    runnerConfiguration.testRunnerExportedRuntimeLibs =
+        new HashSet<>(readAttributeFromHierarchy(TEST_RUNNER_EXPORTED_RUNTIME_LIBS, testClass));
 
     Class configuredClass = findConfiguredClass(testClass);
     runnerConfiguration.exportPluginClasses = new HashSet<>(readAttributeFromClass(EXPORT_PLUGIN_CLASSES, configuredClass));
-    runnerConfiguration.sharedRuntimeLibs = new HashSet<>(readAttributeFromClass(SHARED_RUNTIME_LIBS, configuredClass));
+    runnerConfiguration.sharedApplicationRuntimeLibs =
+        new HashSet<>(readAttributeFromClass(SHARED_RUNTIME_LIBS, configuredClass));
+    runnerConfiguration.applicationRuntimeLibs = new HashSet<>(readAttributeFromClass(APPLICATION_RUNTIME_LIBS, configuredClass));
     runnerConfiguration.extraPrivilegedArtifacts =
         new HashSet<>(readAttributeFromClass(EXTRA_PRIVILEGED_ARTIFACTS, configuredClass));
 
@@ -147,10 +165,13 @@ public class RunnerConfiguration {
     if (!exportPluginClasses.equals(that.exportPluginClasses)) {
       return false;
     }
-    if (!extraPrivilegedArtifacts.equals(that.extraPrivilegedArtifacts)) {
+    if (!applicationRuntimeLibs.equals(that.applicationRuntimeLibs)) {
       return false;
     }
-    return sharedRuntimeLibs.equals(that.sharedRuntimeLibs);
+    if (!testRunnerExportedRuntimeLibs.equals(that.testRunnerExportedRuntimeLibs)) {
+      return false;
+    }
+    return sharedApplicationRuntimeLibs.equals(that.sharedApplicationRuntimeLibs);
   }
 
   @Override
@@ -159,8 +180,9 @@ public class RunnerConfiguration {
     result = 31 * result + testExclusions.hashCode();
     result = 31 * result + testInclusions.hashCode();
     result = 31 * result + exportPluginClasses.hashCode();
-    result = 31 * result + sharedRuntimeLibs.hashCode();
-    result = 31 * result + extraPrivilegedArtifacts.hashCode();
+    result = 31 * result + sharedApplicationRuntimeLibs.hashCode();
+    result = 31 * result + applicationRuntimeLibs.hashCode();
+    result = 31 * result + testRunnerExportedRuntimeLibs.hashCode();
     return result;
   }
 

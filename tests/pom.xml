@@ -29,6 +29,8 @@
         <module>test-services</module>
         <module>runner</module>
         <module>parsers-plugin</module>
+        <module>runner-plugin</module>
+        <module>model</module>
     </modules>
 
     <build>

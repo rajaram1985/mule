@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.hamcrest.Matcher;
 
-@ArtifactClassLoaderRunnerConfig(sharedRuntimeLibs = {"org.mule.tests:mule-tests-unit"})
+@ArtifactClassLoaderRunnerConfig(applicationSharedRuntimeLibs = {"org.mule.tests:mule-tests-model"})
 public abstract class AbstractValuesTestCase extends MuleArtifactFunctionalTestCase {
 
   @Inject

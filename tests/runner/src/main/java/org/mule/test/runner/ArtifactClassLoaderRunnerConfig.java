@@ -15,6 +15,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// TODO(pablo.kraan): runner - update this javadoc
 /**
  * Specifies a configuration needed by {@link ArtifactClassLoaderRunner} in order to run the tests in the module.
  * <p/>
@@ -48,15 +49,38 @@ public @interface ArtifactClassLoaderRunnerConfig {
   String[] providedExclusions() default {};
 
   /**
-   * Runtime libraries in the format of {@code <groupId>:<artifactId>} to be added as shared libraries to
-   * {@link ArtifactClassLoader}. These artifacts have to be declared as {@code test}
-   * scope dependencies for the rootArtifact.
+   * Runtime libraries in the format of {@code [groupId]:[artifactId]} or {@code [groupId]:[artifactId]:[classifier]} to be added
+   * as libraries on the test application's {@link ArtifactClassLoader}. These artifacts have to be declared as {@code test} scope
+   * dependencies for the rootArtifact.
    * <p/>
    * Be aware that only the artifact would be added as shared libraries, it will not include its dependencies.
    *
    * @return array of {@link String} to define runtime libraries in order to be added as shared libraries.
    */
-  String[] sharedRuntimeLibs() default {};
+
+  String[] applicationRuntimeLibs() default {};
+
+  /**
+   * Runtime libraries in the format of {@code [groupId]:[artifactId]} or {@code [groupId]:[artifactId]:[classifier]} to be 
+   * exported on the test runner's {@link ArtifactClassLoader}. These artifacts have to be declared as {@code test} scope 
+   * dependencies for the rootArtifact.
+   * <p/>
+   * Be aware that only the artifact would be added as shared libraries, it will not include its dependencies.
+   *
+   * @return array of {@link String} to define runtime libraries in order to be added as shared libraries.
+   */
+  String[] testRunnerExportedRuntimeLibs() default {};
+
+  /**
+   * Runtime libraries in the format of {@code [groupId]:[artifactId]} or {@code [groupId]:[artifactId]:[classifier]} to be added 
+   * as shared libraries to {@link ArtifactClassLoader}. These artifacts have to be declared as {@code test} scope dependencies 
+   * for the rootArtifact.
+   * <p/>
+   * Be aware that only the artifact would be added as shared libraries, it will not include its dependencies.
+   *
+   * @return array of {@link String} to define runtime libraries in order to be added as shared libraries.
+   */
+  String[] applicationSharedRuntimeLibs() default {};
 
   /**
    * <b>WARNING: do not use this if you want to have a pure isolated test case.</b>
@@ -95,7 +119,8 @@ public @interface ArtifactClassLoaderRunnerConfig {
   String[] testInclusions() default {};
 
   /**
-   * Artifacts to be included as privileged artifacts for the all the modules. In format {@code [groupId]:[artifactId].
+   * Artifacts to be included as privileged artifacts for the all the modules. In format {@code [groupId]:[artifactId]}
+   * or {@code [groupId]:[artifactId]:[classifier]}.
    * <p/>
    * This allows to add test plugins as privileged artifacts without having to modify the mule-module.properties of each module.
    *
