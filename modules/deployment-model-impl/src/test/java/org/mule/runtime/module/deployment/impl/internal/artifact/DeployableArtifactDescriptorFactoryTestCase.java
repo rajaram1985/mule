@@ -161,7 +161,7 @@ public abstract class DeployableArtifactDescriptorFactoryTestCase<D extends Depl
 
     assertThat(desc.getMinMuleVersion(), is(new MuleVersion("4.0.0")));
     assertThat(desc.getConfigResources(), hasSize(1));
-    assertThat(desc.getConfigResources().get(0), is(getDefaultConfigurationResourceLocation()));
+    assertThat(desc.getConfigResources(), hasItem(getDefaultConfigurationResourceLocation()));
 
     ClassLoaderModel classLoaderModel = desc.getClassLoaderModel();
     assertThat(classLoaderModel.getDependencies().isEmpty(), is(true));

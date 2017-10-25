@@ -7,6 +7,7 @@
 package org.mule.runtime.module.deployment.impl.internal.application;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mule.runtime.deployment.model.api.application.ApplicationDescriptor.DEFAULT_CONFIGURATION_RESOURCE;
@@ -40,7 +41,7 @@ public class EmptyApplicationDescriptorTestCase extends AbstractMuleTestCase {
   public void defaultValuesAreCorrect() throws IOException {
     EmptyApplicationDescriptor applicationDescriptor = new EmptyApplicationDescriptor(appFolder);
     assertThat(applicationDescriptor.getName(), is(APP_NAME));
-    assertThat(applicationDescriptor.getConfigResources().get(0), is(DEFAULT_CONFIGURATION_RESOURCE));
+    assertThat(applicationDescriptor.getConfigResources(), hasItem(DEFAULT_CONFIGURATION_RESOURCE));
     assertThat(applicationDescriptor.getLogConfigFile(), is(nullValue()));
   }
 

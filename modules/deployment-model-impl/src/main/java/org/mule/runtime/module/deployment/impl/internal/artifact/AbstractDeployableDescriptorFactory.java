@@ -44,8 +44,7 @@ public abstract class AbstractDeployableDescriptorFactory<M extends MuleDeployab
     descriptor.setRedeploymentEnabled(artifactModel.isRedeploymentEnabled());
     Set<String> configs = artifactModel.getConfigs();
     if (configs != null && !configs.isEmpty()) {
-      descriptor.setConfigResources(configs.stream()
-          .collect(toSet()));
+      descriptor.setConfigResources(configs);
     } else {
       descriptor.setConfigResources(ImmutableSet.<String>builder().add(getDefaultConfigurationResource()).build());
     }
