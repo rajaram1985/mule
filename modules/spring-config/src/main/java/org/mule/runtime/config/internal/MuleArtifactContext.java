@@ -157,7 +157,7 @@ public class MuleArtifactContext extends AbstractRefreshableConfigApplicationCon
       return false;
     }
   });
-  private List<ConfigurableObjectProvider> objectProviders = new ArrayList<>();
+  protected List<ConfigurableObjectProvider> objectProviders = new ArrayList<>();
 
   /**
    * Parses configuration files creating a spring ApplicationContext which is used as a parent registry using the SpringRegistry
@@ -373,7 +373,7 @@ public class MuleArtifactContext extends AbstractRefreshableConfigApplicationCon
 
 
 
-  private void prepareObjectProviders() {
+  protected void prepareObjectProviders() {
     MuleArtifactObjectProvider muleArtifactObjectProvider = new MuleArtifactObjectProvider(this);
     ImmutableObjectProviderConfiguration providerConfiguration =
         new ImmutableObjectProviderConfiguration(applicationModel.getConfigurationProperties(),
@@ -389,8 +389,7 @@ public class MuleArtifactContext extends AbstractRefreshableConfigApplicationCon
    *
    * @param beanFactory the spring bean factory where the objects will be registered.
    */
-  private void registerObjectFromObjectProviders(ConfigurableListableBeanFactory beanFactory) {
-    this.objectProviders.addAll(lookObjectProviders());
+  protected void registerObjectFromObjectProviders(ConfigurableListableBeanFactory beanFactory) {
     ((ObjectProviderAwareBeanFactory) beanFactory).setObjectProviders(objectProviders);
     for (ObjectProvider objectProvider : objectProviders) {
       beanFactory
@@ -399,7 +398,7 @@ public class MuleArtifactContext extends AbstractRefreshableConfigApplicationCon
     }
   }
 
-  private List<ConfigurableObjectProvider> lookObjectProviders() {
+  private List<ConfigurableObjectProvider> lookObjectProviders(ApplicationModel applicationModel) {
     List<ConfigurableObjectProvider> objectProviders = new ArrayList<>();
     applicationModel.executeOnEveryRootElement(componentModel -> {
       if (componentModel.isEnabled() && componentModel.getType() != null
@@ -455,6 +454,7 @@ public class MuleArtifactContext extends AbstractRefreshableConfigApplicationCon
   protected void createInitialApplicationComponents(DefaultListableBeanFactory beanFactory) {
     createApplicationComponents(beanFactory, applicationModel, true);
     // This should only be done once at the initial application model creation, called from Spring
+    this.objectProviders.addAll(lookObjectProviders(applicationModel));
     registerObjectFromObjectProviders(beanFactory);
   }
 

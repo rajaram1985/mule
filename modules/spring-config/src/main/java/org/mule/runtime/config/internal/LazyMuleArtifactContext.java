@@ -18,6 +18,7 @@ import static org.mule.runtime.api.value.ValueProviderService.VALUE_PROVIDER_SER
 import static org.mule.runtime.config.internal.LazyConnectivityTestingService.NON_LAZY_CONNECTIVITY_TESTING_SERVICE;
 import static org.mule.runtime.config.internal.LazyMetadataService.NON_LAZY_METADATA_SERVICE;
 import static org.mule.runtime.config.internal.LazyValueProviderService.NON_LAZY_VALUE_PROVIDER_SERVICE;
+import static org.mule.runtime.core.api.config.MuleProperties.OBJECT_MULE_CONTEXT;
 import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 import static org.mule.runtime.core.privileged.registry.LegacyRegistryUtils.unregisterObject;
 
@@ -27,6 +28,7 @@ import org.mule.runtime.api.connectivity.ConnectivityTestingService;
 import org.mule.runtime.api.exception.MuleException;
 import org.mule.runtime.api.lifecycle.Initialisable;
 import org.mule.runtime.api.lifecycle.Startable;
+import org.mule.runtime.api.meta.NamedObject;
 import org.mule.runtime.api.metadata.MetadataService;
 import org.mule.runtime.api.util.Reference;
 import org.mule.runtime.api.value.ValueProviderService;
@@ -38,6 +40,7 @@ import org.mule.runtime.config.internal.dsl.model.MinimalApplicationModelGenerat
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.config.ConfigResource;
 import org.mule.runtime.core.api.config.bootstrap.ArtifactType;
+import org.mule.runtime.core.api.util.UUID;
 import org.mule.runtime.core.internal.connectivity.DefaultConnectivityTestingService;
 import org.mule.runtime.core.internal.metadata.MuleMetadataService;
 import org.mule.runtime.core.internal.value.MuleValueProviderService;
@@ -45,6 +48,7 @@ import org.mule.runtime.dsl.api.component.ComponentBuildingDefinition;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 import java.util.ArrayList;
@@ -182,6 +186,20 @@ public class LazyMuleArtifactContext extends MuleArtifactContext implements Lazy
       List<String> applicationComponents =
           createApplicationComponents((DefaultListableBeanFactory) this.getBeanFactory(), minimalApplicationModel.get(), false);
       createdComponents.set(applicationComponents);
+
+
+      //this.objectProviders.stream().forEach(objectProvider -> ((BeanDefinitionRegistry)this.getBeanFactory()).removeBeanDefinition(objectProvider instanceof NamedObject ? ((NamedObject) objectProvider).getName() : UUID.getUUID()));
+      //registerObjectFromObjectProviders(this.getBeanFactory());
+      //prepareObjectProviders();
+
+      //this.objectProviders.stream().forEach(objectProvider -> componentLocator.addComponent(objectProvider));
+
+      /*this.objectProviders.stream().forEach(objectProvider -> {
+              String name = objectProvider instanceof NamedObject ? ((NamedObject) objectProvider).getName() : UUID.getUUID();
+              ((DefaultListableBeanFactory) this.getBeanFactory()).removeBeanDefinition(name);
+              this.getBeanFactory().registerSingleton(name, objectProvider);
+      });*/
+
       // This is required to force the execution of postProcessAfterInitialization() for each created component
       applicationComponents.forEach(component -> getRegistry().lookupByName(component).get());
     });
